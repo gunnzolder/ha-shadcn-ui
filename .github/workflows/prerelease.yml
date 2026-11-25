@@ -31,7 +31,7 @@ jobs:
           base=$(jq -r '."."' .release-please-manifest.json)
           slug=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g' | cut -c1-30)
           echo "version=${base}-${slug}.${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: 22
