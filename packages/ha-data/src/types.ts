@@ -30,6 +30,8 @@ export interface HassLike {
     serviceData?: Record<string, unknown>,
     target?: ServiceTarget,
   ): Promise<unknown>;
+  /** Optional HA WebSocket command bridge (present in real HA panel and live source). */
+  callWS?<T = unknown>(msg: Record<string, unknown>): Promise<T>;
 }
 
 export type SourceKind = "mock" | "live" | "panel";

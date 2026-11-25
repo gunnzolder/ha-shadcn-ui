@@ -30,9 +30,9 @@ export function HomeView({ config }: { config: HomeConfig }) {
           <div className="text-sm text-muted-foreground">
             {now.toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
           </div>
-          <h1 className="text-3xl font-semibold tracking-tight">Дім</h1>
+          <h1 className="hidden text-3xl font-semibold tracking-tight md:block">Дім</h1>
         </div>
-        <div className="text-4xl font-light tabular-nums text-muted-foreground">
+        <div className="text-3xl font-light tabular-nums text-muted-foreground md:text-4xl">
           {now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}
         </div>
       </header>

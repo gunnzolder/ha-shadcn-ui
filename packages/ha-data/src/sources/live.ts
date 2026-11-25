@@ -36,6 +36,10 @@ export function createLiveSource(opts: LiveSourceOptions): HassSource {
         if (!conn) return Promise.reject(new Error("Not connected"));
         return wsCallService(conn, domain, service, data, target);
       },
+      callWS: <T = unknown>(msg: Record<string, unknown>) => {
+        if (!conn) return Promise.reject(new Error("Not connected"));
+        return conn.sendMessagePromise<T>(msg as Parameters<Connection["sendMessagePromise"]>[0]);
+      },
     };
     emitter.emit();
   };
