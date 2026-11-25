@@ -23,8 +23,8 @@
           "cards_dev_url": "Cards dev URL"
         },
         "data_description": {
-          "panel_dev_url": "Development only. e.g. http://antons-m4-air.local:5173/src/dev-entry.ts (run `pnpm dev:ha`). Empty = bundled build.",
-          "cards_dev_url": "Development only. e.g. http://antons-m4-air.local:5174/src/index.ts (run `pnpm dev:ha`). Empty = bundled build."
+          "panel_dev_url": "Development only — Vite dev server URL for the panel (port 5173, run `pnpm dev:ha`). Empty = bundled build.",
+          "cards_dev_url": "Development only — Vite dev server URL for cards (port 5174, run `pnpm dev:ha`). Empty = bundled build."
         }
       }
     },
