@@ -1,0 +1,35 @@
+{
+  "name": "@hsu/ha-data",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "One hass-shaped data layer for the panel and the cards: panel (real HA), live (WebSocket + token) and mock (fixtures + scenarios) sources.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./react": "./src/react.tsx",
+    "./fixtures/*": "./fixtures/*"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "snapshot": "node scripts/snapshot.mjs"
+  },
+  "dependencies": {
+    "home-assistant-js-websocket": "^9.9.0"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "react": "^19.2.0",
+    "typescript": "^5.9.0",
+    "vitest": "^5.1.0"
+  },
+  "sideEffects": false
+}

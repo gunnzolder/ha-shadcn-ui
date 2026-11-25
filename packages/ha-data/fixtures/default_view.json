@@ -1,0 +1,223 @@
+{
+  "_meta": {
+    "source": "http://homeassistant.local:8123/lovelace/default_view",
+    "captured_at": "2026-11-25T12:03:00Z",
+    "note": "Sanitized snapshot (entity_picture/tokens removed). Regenerate with `pnpm snapshot`. Views eveus/deye are intentionally not included."
+  },
+  "view": {
+    "path": "default_view",
+    "title": "Home",
+    "cards": [
+      {
+        "type": "entities",
+        "entities": [
+          { "entity": "switch.sonoff_10010d79fc", "name": "Starlink", "icon": "mdi:satellite-uplink" }
+        ]
+      },
+      {
+        "type": "entities",
+        "title": "1st floor",
+        "show_header_toggle": false,
+        "entities": [
+          { "entity": "switch.sonoff_10010508d8", "name": "Terrace" },
+          { "entity": "switch.sonoff_100110a5bf", "icon": "mdi:lightbulb" }
+        ]
+      },
+      {
+        "type": "vertical-stack",
+        "cards": [
+          { "type": "heading", "heading": "Мережа", "icon": "mdi:transmission-tower", "heading_style": "title" },
+          {
+            "type": "markdown",
+            "entity_id": [
+              "binary_sensor.deye_connection",
+              "binary_sensor.deye_grid",
+              "sensor.deye_device_alarm",
+              "sensor.deye_device_fault",
+              "sensor.deye_grid_l1_voltage",
+              "sensor.deye_grid_l2_voltage",
+              "sensor.deye_grid_l3_voltage",
+              "sensor.deye_battery"
+            ],
+            "content": "{% set connection = states('binary_sensor.deye_connection') %}\n{% set grid = states('binary_sensor.deye_grid') %}\n{% set alarm = states('sensor.deye_device_alarm') %}\n{% set fault = states('sensor.deye_device_fault') %}\n{% set l1_raw = states('sensor.deye_grid_l1_voltage') %}\n{% set l2_raw = states('sensor.deye_grid_l2_voltage') %}\n{% set l3_raw = states('sensor.deye_grid_l3_voltage') %}\n{% set battery = states('sensor.deye_battery') %}\n{% set missing = ['unknown', 'unavailable'] %}\n{% if connection != 'on' or grid in missing or alarm in missing or fault in missing or l1_raw in missing or l2_raw in missing or l3_raw in missing %}⚪ недоступно{% elif alarm != 'OK' or fault != 'OK' %}🟡 error{% elif grid == 'on' %}🟢 on{% elif l1_raw | float(0) > 50 or l2_raw | float(0) > 50 or l3_raw | float(0) > 50 %}🟡 error{% else %}🔴 off{% endif %}\n\n⚡️ **L1** {{ l1_raw }} V &nbsp;&nbsp; **L2** {{ l2_raw }} V &nbsp;&nbsp; **L3** {{ l3_raw }} V  \n{% if battery in missing %}⚪ недоступно{% elif battery | float(0) <= 30 %}🪫 {{ battery }}%{% else %}🔋 {{ battery }}%{% endif %}"
+          }
+        ]
+      },
+      {
+        "type": "vertical-stack",
+        "cards": [
+          { "type": "heading", "heading": "За графіком", "icon": "mdi:calendar-clock", "heading_style": "title" },
+          {
+            "type": "markdown",
+            "entity_id": "sensor.lapka_svitla_queue_4_1",
+            "content": "{% set e = 'sensor.lapka_svitla_queue_4_1' %}\n{% if is_state(e, 'on') %}🟢 світло є{% elif is_state(e, 'off') %}🔴 відключення{% elif is_state(e, 'unavailable') %}⚪ недоступно{% else %}🟡 error{% endif %}\n\n{{ state_attr(e, 'next_event') or '' }}\n<font color=#9b9b9b>{{ state_attr(e, 'region') }} · Черга {{ state_attr(e, 'queue') }}</font>"
+          },
+          {
+            "type": "markdown",
+            "entity_id": "sensor.lapka_svitla_queue_4_1",
+            "content": "{% set e = 'sensor.lapka_svitla_queue_4_1' %} \n<ha-icon icon=\"mdi:calendar-today\"></ha-icon> **{{ state_attr(e, 'today_heading') }}**  \n{% for item in state_attr(e, 'today_intervals') or [] %}{{ item }}{% if not loop.last %} · {% endif %}{% else %}—{% endfor %}\n\n{% if state_attr(e, 'tomorrow_heading') %}<ha-icon icon=\"mdi:calendar-arrow-right\"></ha-icon> **{{ state_attr(e, 'tomorrow_heading') }}**{% if state_attr(e, 'tomorrow_intervals') %}  \n{% for item in state_attr(e, 'tomorrow_intervals') %}{{ item }}{% if not loop.last %} · {% endif %}{% endfor %}{% endif %}{% endif %}"
+          }
+        ]
+      },
+      { "type": "weather-forecast", "entity": "weather.forecast_home", "show_forecast": false },
+      { "type": "media-control", "entity": "media_player.lg_webos_tv_un71006lb" }
+    ]
+  },
+  "states": {
+    "switch.sonoff_10010d79fc": {
+      "entity_id": "switch.sonoff_10010d79fc",
+      "state": "off",
+      "attributes": { "friendly_name": "PERENOSKA" },
+      "last_changed": "2026-11-25T10:10:16.511Z",
+      "last_updated": "2026-11-25T10:10:16.511Z"
+    },
+    "switch.sonoff_10010508d8": {
+      "entity_id": "switch.sonoff_10010508d8",
+      "state": "off",
+      "attributes": { "friendly_name": "Terrace" },
+      "last_changed": "2026-11-24T21:18:10.152Z",
+      "last_updated": "2026-11-24T21:18:10.152Z"
+    },
+    "switch.sonoff_100110a5bf": {
+      "entity_id": "switch.sonoff_100110a5bf",
+      "state": "off",
+      "attributes": { "friendly_name": "Parking light" },
+      "last_changed": "2026-11-24T19:39:46.555Z",
+      "last_updated": "2026-11-24T19:39:46.555Z"
+    },
+    "binary_sensor.deye_connection": {
+      "entity_id": "binary_sensor.deye_connection",
+      "state": "on",
+      "attributes": { "device_class": "connectivity", "friendly_name": "Deye Connection" },
+      "last_changed": "2026-11-25T00:23:55.416Z",
+      "last_updated": "2026-11-25T12:02:56.643Z"
+    },
+    "binary_sensor.deye_grid": {
+      "entity_id": "binary_sensor.deye_grid",
+      "state": "on",
+      "attributes": { "device_class": "power", "icon": "mdi:transmission-tower", "friendly_name": "Deye Grid" },
+      "last_changed": "2026-11-25T09:57:31.831Z",
+      "last_updated": "2026-11-25T09:57:31.831Z"
+    },
+    "sensor.deye_device_alarm": {
+      "entity_id": "sensor.deye_device_alarm",
+      "state": "OK",
+      "attributes": {
+        "options": ["OK", "Fan failure", "Grid phase failure", "Meter communication failure", "Battery loss", "Parallel communication quality", "Problem"],
+        "value": [],
+        "device_class": "enum",
+        "icon": "mdi:alert-outline",
+        "friendly_name": "Deye Device Alarm"
+      },
+      "last_changed": "2026-11-25T00:23:55.393Z",
+      "last_updated": "2026-11-25T00:23:55.393Z"
+    },
+    "sensor.deye_device_fault": {
+      "entity_id": "sensor.deye_device_fault",
+      "state": "OK",
+      "attributes": {
+        "options": ["OK", "DC/DC Soft Start failure", "Auxiliary power supply failure", "Working mode changed", "AC Over-current failure", "Tz_Integ_Fault failure", "DC Over-current failure", "AC current leakage failure", "Temperature is too high", "Problem"],
+        "value": [],
+        "device_class": "enum",
+        "icon": "mdi:message-alert-outline",
+        "friendly_name": "Deye Device Fault"
+      },
+      "last_changed": "2026-11-25T00:23:55.393Z",
+      "last_updated": "2026-11-25T00:23:55.393Z"
+    },
+    "sensor.deye_grid_l1_voltage": {
+      "entity_id": "sensor.deye_grid_l1_voltage",
+      "state": "219.4",
+      "attributes": { "state_class": "measurement", "unit_of_measurement": "V", "device_class": "voltage", "icon": "mdi:transmission-tower", "friendly_name": "Deye Grid L1 Voltage" },
+      "last_changed": "2026-11-25T12:02:56.620Z",
+      "last_updated": "2026-11-25T12:02:56.620Z"
+    },
+    "sensor.deye_grid_l2_voltage": {
+      "entity_id": "sensor.deye_grid_l2_voltage",
+      "state": "219.6",
+      "attributes": { "state_class": "measurement", "unit_of_measurement": "V", "device_class": "voltage", "icon": "mdi:transmission-tower", "friendly_name": "Deye Grid L2 Voltage" },
+      "last_changed": "2026-11-25T12:02:56.623Z",
+      "last_updated": "2026-11-25T12:02:56.623Z"
+    },
+    "sensor.deye_grid_l3_voltage": {
+      "entity_id": "sensor.deye_grid_l3_voltage",
+      "state": "220.1",
+      "attributes": { "state_class": "measurement", "unit_of_measurement": "V", "device_class": "voltage", "icon": "mdi:transmission-tower", "friendly_name": "Deye Grid L3 Voltage" },
+      "last_changed": "2026-11-25T12:02:56.624Z",
+      "last_updated": "2026-11-25T12:02:56.624Z"
+    },
+    "sensor.deye_battery": {
+      "entity_id": "sensor.deye_battery",
+      "state": "90",
+      "attributes": {
+        "state_class": "measurement",
+        "Nominal Voltage": 48,
+        "Life Cycle Rating": 6000,
+        "Corrected Capacity": 200,
+        "BMS SOC": 90,
+        "BMS Current": 0,
+        "BMS Voltage": 53.46,
+        "BMS Charging Voltage": 56.8,
+        "BMS Max Charging Current": 305,
+        "BMS Max Discharging Current": 305,
+        "unit_of_measurement": "%",
+        "device_class": "battery",
+        "friendly_name": "Deye Battery"
+      },
+      "last_changed": "2026-11-25T09:22:18.425Z",
+      "last_updated": "2026-11-25T12:01:26.832Z"
+    },
+    "sensor.lapka_svitla_queue_4_1": {
+      "entity_id": "sensor.lapka_svitla_queue_4_1",
+      "state": "on",
+      "attributes": {
+        "friendly_name": "Лапка Світла — черга 4.1",
+        "icon": "mdi:transmission-tower",
+        "today_heading": "Сьогодні · без світла 9 год",
+        "today_intervals": ["06:00 – 10:00 · 4 год", "16:30 – 21:30 · 5 год"],
+        "tomorrow_heading": "Завтра: графік ще не опубліковано",
+        "tomorrow_intervals": [],
+        "region": "Київська область",
+        "queue": "4.1",
+        "synchronized": "Синхронізовано о 23:55",
+        "schedule_date": "2026-11-25",
+        "status": "Зараз світло є",
+        "next_event": "Наступне відключення о 16:30",
+        "fetched_at": "2026-11-25T14:01:35+02:00"
+      },
+      "last_changed": "2026-11-25T08:00:14.156Z",
+      "last_updated": "2026-11-25T12:01:35.918Z"
+    },
+    "weather.forecast_home": {
+      "entity_id": "weather.forecast_home",
+      "state": "cloudy",
+      "attributes": {
+        "temperature": 2.7,
+        "dew_point": -4.6,
+        "temperature_unit": "°C",
+        "humidity": 60,
+        "cloud_coverage": 96.1,
+        "uv_index": 0.5,
+        "pressure": 1016.9,
+        "pressure_unit": "hPa",
+        "wind_bearing": 298.5,
+        "wind_speed": 27.4,
+        "wind_speed_unit": "km/h",
+        "visibility_unit": "km",
+        "precipitation_unit": "mm",
+        "attribution": "Weather forecast from met.no, delivered by the Norwegian Meteorological Institute.",
+        "friendly_name": "Home",
+        "supported_features": 3
+      },
+      "last_changed": "2026-11-25T03:00:54.689Z",
+      "last_updated": "2026-11-25T11:24:54.718Z"
+    },
+    "media_player.lg_webos_tv_un71006lb": {
+      "entity_id": "media_player.lg_webos_tv_un71006lb",
+      "state": "unavailable",
+      "attributes": { "device_class": "tv", "friendly_name": "LG webOS TV UN71006LB", "supported_features": 24381 },
+      "last_changed": "2026-11-24T19:40:09.947Z",
+      "last_updated": "2026-11-24T19:40:09.947Z"
+    }
+  }
+}

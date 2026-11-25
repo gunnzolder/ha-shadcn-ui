@@ -1,0 +1,16 @@
+{
+  "name": "@hsu/tokens",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Single source of design tokens → shadcn CSS variables (panel + cards) and a Home Assistant YAML theme (stock HA screens).",
+  "exports": {
+    "./theme.css": "./theme.css",
+    "./tokens.json": "./tokens.json"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "typecheck": "node build.mjs --check",
+    "test": "node build.mjs --check"
+  }
+}

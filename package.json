@@ -1,0 +1,25 @@
+{
+  "name": "ha-shadcn-ui",
+  "private": true,
+  "version": "0.1.0",
+  "description": "shadcn-based UI for Home Assistant: a sidebar panel (React) + Lovelace cards (Lit), shipped as one HACS integration.",
+  "type": "module",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @hsu/panel dev",
+    "dev:live": "pnpm --filter @hsu/panel dev:live",
+    "dev:cards": "pnpm --filter @hsu/cards dev",
+    "dev:ha": "pnpm --parallel --filter @hsu/panel --filter @hsu/cards dev:ha",
+    "build": "pnpm --filter @hsu/tokens build && pnpm --filter @hsu/panel build && pnpm --filter @hsu/cards build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "snapshot": "pnpm --filter @hsu/ha-data snapshot --",
+    "theme": "pnpm --filter @hsu/tokens build",
+    "package": "node scripts/package.mjs",
+    "deploy:ha": "bash scripts/deploy-ha.sh"
+  }
+}

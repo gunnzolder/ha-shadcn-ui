@@ -1,0 +1,27 @@
+{
+  "name": "@hsu/cards",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Lovelace custom cards (Lit, shadow DOM) styled with the same shadcn tokens as the panel.",
+  "scripts": {
+    "dev": "vite",
+    "dev:live": "vite --mode live",
+    "dev:ha": "vite --mode ha",
+    "build": "vite build",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hsu/ha-data": "workspace:*",
+    "@hsu/tokens": "workspace:*",
+    "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "happy-dom": "^21.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.0.0",
+    "vitest": "^5.1.0",
+    "@mdi/js": "^7.4.47"
+  }
+}

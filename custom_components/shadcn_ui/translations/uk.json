@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "shadcn UI",
+        "description": "Додає бічну панель на shadcn і власні картки Lovelace (custom:hsu-*)."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Вже налаштовано."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "shadcn UI",
+        "data": {
+          "sidebar_title": "Назва в бічній панелі",
+          "sidebar_icon": "Іконка",
+          "url_path": "URL-шлях",
+          "require_admin": "Лише для адмінів",
+          "panel_dev_url": "Dev URL панелі",
+          "cards_dev_url": "Dev URL карток"
+        },
+        "data_description": {
+          "panel_dev_url": "Лише для розробки. Напр. http://antons-m4-air.local:5173/src/dev-entry.ts (запустіть `pnpm dev:ha`). Порожнє = зібрана версія.",
+          "cards_dev_url": "Лише для розробки. Напр. http://antons-m4-air.local:5174/src/index.ts (запустіть `pnpm dev:ha`). Порожнє = зібрана версія."
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Dev URL має починатися з http:// або https://"
+    }
+  }
+}

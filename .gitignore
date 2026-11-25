@@ -1,0 +1,18 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.DS_Store
+
+# local secrets (HA url + long-lived token)
+.env.local
+.env.*.local
+
+# build output of the frontend — produced by CI and packed into the HACS zip
+custom_components/shadcn_ui/www/
+!custom_components/shadcn_ui/www/.gitkeep
+
+# packaged release
+shadcn_ui.zip
+
+__pycache__/
+.pytest_cache/

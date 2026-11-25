@@ -1,0 +1,73 @@
+# Every PR and every push to main: types, tests, build, HA validation.
+# The built HACS zip is attached to the run as an artifact (download it to test a PR by hand).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend (types · tests · build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Theme files are up to date with tokens.json
+        run: pnpm --filter @hsu/tokens test
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          HSU_VERSION: 0.0.0-ci.${{ github.run_number }}
+      - name: Package HACS zip
+        run: node scripts/package.mjs
+        env:
+          HSU_VERSION: 0.0.0-ci.${{ github.run_number }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shadcn_ui-${{ github.sha }}
+          path: shadcn_ui.zip
+          retention-days: 14
+
+  integration:
+    name: Integration (pytest vs HA core)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install HA test harness (+ matching frontend package)
+        run: |
+          pip install -r requirements_test.txt
+          pip install "$(python -c 'import json,pathlib,homeassistant.components.frontend as f; print(json.loads((pathlib.Path(f.__file__).parent/"manifest.json").read_text())["requirements"][0])')"
+      - run: pytest -q
+
+  hassfest:
+    name: hassfest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    name: HACS validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # brands = logo PR to home-assistant/brands; not needed for a custom repo
+          ignore: brands

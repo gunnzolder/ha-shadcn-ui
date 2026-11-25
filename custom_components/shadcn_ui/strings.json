@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "shadcn UI",
+        "description": "Adds the shadcn sidebar panel and the custom Lovelace cards (custom:hsu-*)."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "shadcn UI",
+        "data": {
+          "sidebar_title": "Sidebar title",
+          "sidebar_icon": "Sidebar icon",
+          "url_path": "URL path",
+          "require_admin": "Admins only",
+          "panel_dev_url": "Panel dev URL",
+          "cards_dev_url": "Cards dev URL"
+        },
+        "data_description": {
+          "panel_dev_url": "Development only. e.g. http://antons-m4-air.local:5173/src/dev-entry.ts (run `pnpm dev:ha`). Empty = bundled build.",
+          "cards_dev_url": "Development only. e.g. http://antons-m4-air.local:5174/src/index.ts (run `pnpm dev:ha`). Empty = bundled build."
+        }
+      }
+    },
+    "error": {
+      "invalid_url": "Dev URLs must start with http:// or https://"
+    }
+  }
+}

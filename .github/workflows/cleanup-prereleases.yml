@@ -1,0 +1,24 @@
+# When a branch is deleted (e.g. after merge), remove its pre-releases and tags so HACS's
+# version list stays clean.
+name: Clean up branch pre-releases
+
+on: delete
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      BRANCH: ${{ github.event.ref }}
+    steps:
+      - run: |
+          slug=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g' | cut -c1-30)
+          gh release list -R "$REPO" --limit 200 --json tagName,isPrerelease \
+            -q ".[] | select(.isPrerelease) | .tagName" | grep -- "-${slug}\." | while read -r tag; do
+              echo "deleting $tag"; gh release delete "$tag" -R "$REPO" --yes --cleanup-tag
+            done || true

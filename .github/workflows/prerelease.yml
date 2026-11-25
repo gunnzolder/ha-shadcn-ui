@@ -1,0 +1,53 @@
+# Test a feature branch on the real HA through HACS, without merging:
+#   Actions → "Pre-release from branch" → Run workflow → pick your branch
+#   (or push to a branch named beta/*).
+# Creates a GitHub pre-release vX.Y.Z-<branch>.<n> with shadcn_ui.zip.
+# In HA: HACS → shadcn UI → ⋮ → Redownload → enable "Show beta versions" → pick that version → restart.
+name: Pre-release from branch
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["beta/**"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prerelease-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prerelease:
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute version
+        id: v
+        run: |
+          base=$(jq -r '."."' .release-please-manifest.json)
+          slug=$(echo "${GITHUB_REF_NAME}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g' | cut -c1-30)
+          echo "version=${base}-${slug}.${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          HSU_VERSION: ${{ steps.v.outputs.version }}
+      - run: node scripts/package.mjs
+        env:
+          HSU_VERSION: ${{ steps.v.outputs.version }}
+      - name: Publish pre-release
+        run: |
+          gh release create "v${{ steps.v.outputs.version }}" shadcn_ui.zip \
+            --prerelease \
+            --target "${GITHUB_SHA}" \
+            --title "v${{ steps.v.outputs.version }} (${GITHUB_REF_NAME})" \
+            --notes "Pre-release from \`${GITHUB_REF_NAME}\` @ ${GITHUB_SHA::7}. Install via HACS with *Show beta versions*."
