@@ -22,6 +22,23 @@
 #   ha-svg-icon[slot="start"], ha-icon[slot="start"] — leading item icons
 #   .item-text / .badge[slot="start"|"end"]   — row label and notification/update count badges
 
+# Open the shadcn "Дім" panel by default when visiting HA root / default_view,
+# while keeping direct links and refreshes to settings, profile, and other views intact.
+default_path: "/home-ui"
+default_path_allowlist:
+  - "/home-ui*"
+  - "/lovelace/deye*"
+  - "/lovelace/eveus*"
+  - "/config*"
+  - "/profile*"
+  - "/energy*"
+  - "/history*"
+  - "/logbook*"
+  - "/map*"
+  - "/media-browser*"
+  - "/marketplace*"
+  - "/app*"
+
 # Colors read from shadcn_ui theme variables (--hsu-*) — auto-switch between light and dark modes
 sidebar_background: "var(--hsu-sidebar-bg, var(--sidebar-background-color))"
 sidebar_border_color: "var(--hsu-sidebar-border, var(--divider-color))"
