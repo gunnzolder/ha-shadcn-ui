@@ -46,7 +46,7 @@
        # - /hacsfiles/custom-sidebar/custom-sidebar-plugin.js       # HACS (HA < 2026.11)
    ```
 3. Покладіть згенерований `themes/custom-sidebar/custom-sidebar-config.yaml` у `/config/www/custom-sidebar-config.yaml` (вручну або `pnpm deploy:ha --theme`).
-4. У профілі HA виберіть тему `shadcn_ui` та оновіть сторінку. Усі кольори читаються зі змінних `--hsu-*` теми `shadcn_ui`, тому світла/темна тема перемикається на льоту без перезавантаження конфігу. Порядок і приховування пунктів залишаються в стандартному редакторі сайдбару HA.
+4. У профілі HA виберіть тему `shadcn_ui` та оновіть сторінку. Усі кольори читаються зі змінних `--hsu-*` теми `shadcn_ui`, тому світла/темна тема перемикається на льоту без перезавантаження конфігу. `custom-sidebar-config.yaml` встановлює `sidebar_mode: "hidden"` (щоб не дублювати наш shadcn-сайдбар на `/home-ui`) та `default_path: "/home-ui"` з `default_path_allowlist`. Свої пункти меню налаштовуються прямо в інтерфейсі через **«Налаштувати меню»** (`frontend/set_user_data` → `hsu_nav`).
 
 ## 2. Гілки й пайплайн
 
@@ -72,3 +72,4 @@ feature/xyz ──PR──▶ main ──release-please PR──▶ tag vX.Y.Z �
 - **shadcn-компонент**: `cd apps/panel && npx shadcn add <name>`. ReUI / інші реєстри — через `registries` у `apps/panel/components.json`.
 - **Нова картка**: `packages/cards/src/<name>-card.ts` (наслідувати `HsuBaseCard`), імпорт у `src/index.ts`, додати в `dev/main.ts`, тест у `cards.test.ts`. Логіку станів — у `packages/ha-data/src/domain.ts`, щоб панель і картка поводились однаково.
 - **Кольори/радіуси**: тільки `packages/tokens/tokens.json` (можна вставити значення з tweakcn) → `pnpm theme`. Оновляться і панель, і картки, і YAML-тема, і `themes/custom-sidebar/custom-sidebar-config.yaml`.
+- **Пункти меню за замовчуванням**: `packages/ha-data/src/navigation.ts` (+ тест у `navigation.test.ts`); UI навігації й редактора — в `apps/panel/src/components/nav/`.

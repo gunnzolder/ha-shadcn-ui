@@ -4,18 +4,18 @@
 
 | Що | Технології | Де в HA |
 |---|---|---|
-| **Панель «Дім»** | React 19 + shadcn/ui + Tailwind 4 | Пункт у бічній панелі (custom panel в iframe) |
+| **Панель «Дім»** | React 19 + shadcn/ui + Tailwind 4 | Стартова сторінка `/home-ui` (custom panel в iframe) зі своєю десктопною й мобільною навігацією та редактором меню |
 | **Lovelace-картки** `custom:hsu-*` | Lit + ті самі токени | У будь-якому дашборді |
 | **YAML-тема** `shadcn_ui` | згенерована з токенів | Стандартні екрани HA (налаштування, more-info, старі дашборди) |
-| **Стиль сайдбару** | `custom-sidebar` + токени | Головне меню HA (`ha-sidebar`), світла й темна теми |
+| **Конфіг сайдбару** | `custom-sidebar` + токени | Ховає дубльоване меню HA на `/home-ui`, редіректить `/` → `/home-ui`, стилізує висувний drawer на інших екранах HA |
 
 Усе встановлюється й оновлюється як **одна HACS-інтеграція** (з HA 2026.11 HACS вбудований у HA як Marketplace) з GitHub Releases.
 
 ```
-apps/panel/                 React-панель (shadcn CLI працює тут: npx shadcn add …)
+apps/panel/                 React-панель + AppShell навігація (shadcn CLI працює тут: npx shadcn add …)
 packages/cards/             Lovelace-картки (Lit) + playground
 packages/ha-data/           спільний шар даних: hass-подібний API, mock/live/panel-джерела,
-                            сценарії, view-model функції (порт Jinja-шаблонів) + фікстури
+                            сценарії, domain.ts + navigation.ts (чисті функції) + фікстури
 packages/tokens/            tokens.json → theme.css (панель+картки), themes/shadcn_ui.yaml
                             і themes/custom-sidebar/custom-sidebar-config.yaml
 custom_components/shadcn_ui Python-інтеграція: віддає www/, реєструє панель і картки
@@ -34,7 +34,7 @@ pnpm check            # typecheck + тести + збірка
 
 Далі: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) — як дебажити (моки → живий HA → HMR прямо в сайдбарі HA), гілки й пайплайн.
 Чому так влаштовано: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-Відкриті задачі для продовження: [docs/tasks/](docs/tasks/) — зокрема [shadcn-вигляд меню HA](docs/tasks/sidebar-theme.md).
+Архів брифів задач: [docs/tasks/](docs/tasks/).
 
 ## Встановлення в HA
 
@@ -53,9 +53,10 @@ pnpm check            # typecheck + тести + збірка
          # - /hacsfiles/custom-sidebar/custom-sidebar-plugin.js       # HACS (HA < 2026.11)
      ```
    - Скопіювати `themes/custom-sidebar/custom-sidebar-config.yaml` у `/config/www/custom-sidebar-config.yaml` (або запустити `pnpm deploy:ha --theme`).
-   - Вибрати тему `shadcn_ui` у профілі та оновити сторінку — світла й темна теми перемикаються автоматично через змінні `--hsu-*`. Порядок пунктів редагується стандартним редактором HA.
+   - Вибрати тему `shadcn_ui` у профілі та оновити сторінку: відкриття `/` переходить на `/home-ui` («Дім»), стандартний сайдбар HA ховається (`sidebar_mode: "hidden"`), щоб не дублюватись із нашим shadcn-сайдбаром, а на інших сторінках HA (`/lovelace/deye`, `/lovelace/eveus`, `/config`) лишається кнопка `☰`.
+   - Керувати пунктами меню (вмикати/вимикати, сортувати, додавати власні шляхи HA) можна прямо в інтерфейсі через **«Налаштувати меню»** (налаштування синхронізуються між пристроями в профілі HA).
 
-Оновлення приходять як «Update available» у HA після кожного релізу.
+Оновлення інтеграції (панель «Дім», картки `custom:hsu-*` та Python-частина) приходять як «Update available» у HA після кожного GitHub Release. Файли `themes/shadcn_ui.yaml` і `custom-sidebar-config.yaml` оновлюються окремо (`pnpm deploy:ha --theme`), коли змінюються токени або конфіг сайдбару.
 
 ## Картки
 
