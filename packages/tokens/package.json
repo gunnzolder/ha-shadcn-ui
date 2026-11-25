@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "description": "Single source of design tokens → shadcn CSS variables (panel + cards) and a Home Assistant YAML theme (stock HA screens).",
+  "description": "Single source of design tokens → shadcn CSS variables (panel + cards), Home Assistant YAML theme (stock HA screens), and custom-sidebar styling.",
   "exports": {
     "./theme.css": "./theme.css",
     "./tokens.json": "./tokens.json"
