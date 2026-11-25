@@ -35,4 +35,4 @@ UI-код ніколи не знає, звідки дані: однаковий 
 - Реєструються в `window.customCards` → видно в пікері карток.
 
 ## Токени → три виходи
-`packages/tokens/tokens.json` → `theme.css` (панель + картки) і `themes/shadcn_ui.yaml` (стандартні екрани HA). CI падає, якщо згенеровані файли не відповідають токенам.
+`packages/tokens/tokens.json` → `packages/tokens/theme.css` (панель + картки), `themes/shadcn_ui.yaml` (стандартні екрани HA + змінні `--hsu-*`) і `themes/custom-sidebar/custom-sidebar-config.yaml` (shadcn-вигляд головного меню HA через `elchininet/custom-sidebar`). CI падає, якщо згенеровані файли не відповідають токенам.
