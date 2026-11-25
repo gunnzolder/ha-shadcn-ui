@@ -23,8 +23,8 @@
           "cards_dev_url": "Dev URL карток"
         },
         "data_description": {
-          "panel_dev_url": "Лише для розробки. Напр. http://antons-m4-air.local:5173/src/dev-entry.ts (запустіть `pnpm dev:ha`). Порожнє = зібрана версія.",
-          "cards_dev_url": "Лише для розробки. Напр. http://antons-m4-air.local:5174/src/index.ts (запустіть `pnpm dev:ha`). Порожнє = зібрана версія."
+          "panel_dev_url": "Лише для розробки — dev-сервер Vite для панелі (порт 5173, запустіть `pnpm dev:ha`). Порожнє = зібрана версія.",
+          "cards_dev_url": "Лише для розробки — dev-сервер Vite для карток (порт 5174, запустіть `pnpm dev:ha`). Порожнє = зібрана версія."
         }
       }
     },

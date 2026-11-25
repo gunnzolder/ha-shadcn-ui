@@ -33,7 +33,20 @@
 
 ### Збірка гілки в HA без релізу (`pnpm deploy:ha`)
 Збирає, копіює `custom_components/shadcn_ui` у HA (Samba add-on → `/Volumes/config`, або SSH add-on → `root@homeassistant.local:/config`) і перезавантажує інтеграцію через REST. Версія штампується як `0.0.0-dev.<branch>.<sha>`.
-`pnpm deploy:ha --restart` — якщо змінювався Python.
+- `pnpm deploy:ha --theme` — додатково копіює `themes/shadcn_ui.yaml` у `/config/themes/` та `themes/custom-sidebar/custom-sidebar-config.yaml` у `/config/www/`, і викликає `frontend.reload_themes`. Для оновлення конфігу сайдбару достатньо перезавантажити сторінку (`custom-sidebar` сам додає `?hash=…` з `cache: 'no-store'`).
+- `pnpm deploy:ha --restart` — якщо змінювався Python (можна комбінувати з `--theme`).
+
+### Стилізація меню HA (`custom-sidebar`)
+1. Встановіть [elchininet/custom-sidebar](https://elchininet.github.io/custom-sidebar/) (v17.0.0+ для HA 2026.8+) через *Settings → Marketplace* (або HACS на HA < 2026.11).
+2. Підключіть модуль у `configuration.yaml` і перезапустіть HA:
+   ```yaml
+   frontend:
+     extra_module_url:
+       - /local/community/custom-sidebar/custom-sidebar-plugin.js   # Marketplace (HA 2026.11+)
+       # - /hacsfiles/custom-sidebar/custom-sidebar-plugin.js       # HACS (HA < 2026.11)
+   ```
+3. Покладіть згенерований `themes/custom-sidebar/custom-sidebar-config.yaml` у `/config/www/custom-sidebar-config.yaml` (вручну або `pnpm deploy:ha --theme`).
+4. У профілі HA виберіть тему `shadcn_ui` та оновіть сторінку. Усі кольори читаються зі змінних `--hsu-*` теми `shadcn_ui`, тому світла/темна тема перемикається на льоту без перезавантаження конфігу. Порядок і приховування пунктів залишаються в стандартному редакторі сайдбару HA.
 
 ## 2. Гілки й пайплайн
 
@@ -58,4 +71,4 @@ feature/xyz ──PR──▶ main ──release-please PR──▶ tag vX.Y.Z �
 
 - **shadcn-компонент**: `cd apps/panel && npx shadcn add <name>`. ReUI / інші реєстри — через `registries` у `apps/panel/components.json`.
 - **Нова картка**: `packages/cards/src/<name>-card.ts` (наслідувати `HsuBaseCard`), імпорт у `src/index.ts`, додати в `dev/main.ts`, тест у `cards.test.ts`. Логіку станів — у `packages/ha-data/src/domain.ts`, щоб панель і картка поводились однаково.
-- **Кольори/радіуси**: тільки `packages/tokens/tokens.json` (можна вставити значення з tweakcn) → `pnpm theme`. Оновляться і панель, і картки, і YAML-тема.
+- **Кольори/радіуси**: тільки `packages/tokens/tokens.json` (можна вставити значення з tweakcn) → `pnpm theme`. Оновляться і панель, і картки, і YAML-тема, і `themes/custom-sidebar/custom-sidebar-config.yaml`.

@@ -49,6 +49,7 @@ jobs:
         with:
           python-version: "3.13"
           cache: pip
+          cache-dependency-path: requirements_test.txt
       - name: Install HA test harness (+ matching frontend package)
         run: |
           pip install -r requirements_test.txt
